@@ -1,0 +1,28 @@
+[flake8]
+# Ignoring some errors
+ignore =
+    # Line too long - handled by black
+    E501
+    # Line break before binary operator - handled by black
+    W503
+    # Line break after binary operator - handled by black
+    W504
+
+# Maximum line length
+max-line-length = 100
+
+# Exclude some directories
+exclude =
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    .vscode,
+    .idea,
+    node_modules
+
+# Docstring convention
+docstring-convention = google
+
+# Plugins
+max-complexity = 10

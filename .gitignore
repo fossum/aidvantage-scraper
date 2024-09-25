@@ -1,1 +1,5 @@
+# User data
 .env
+
+# Python Compiled Code
+**/*.pyc

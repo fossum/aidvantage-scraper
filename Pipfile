@@ -1,15 +1,20 @@
+# [[source]]
+# url = "https://artifactory.metro.ad.selinc.com/artifactory/api/pypi/sel-pypi/simple"
+# verify_ssl = false
+# name = "pip_conf_index_global"
+
 [[source]]
-url = "https://artifactory.metro.ad.selinc.com/artifactory/api/pypi/sel-pypi/simple"
-verify_ssl = false
-name = "pip_conf_index_global"
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
 
 [packages]
-beautifulsoup4 = "*"
-requests = "*"
-selenium = "*"
 attrs = "*"
+pandas = "*"
+selenium = "*"
 
 [dev-packages]
+flake8 = "*"
 
 [requires]
 python_version = "3.10"
