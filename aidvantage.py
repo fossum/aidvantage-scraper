@@ -71,8 +71,17 @@ class LoanDetails:
 @define
 class PageDetail:
     """Data class representing a page within the website."""
-    MATCHING_TEXT: str
-    LINK_TEXT: str | None
+    matching_text: str
+    link_text: str | None
+
+
+@define
+class UserLogin:
+    """Data class representing a user's login."""
+    username: str
+    password: str
+    ssn: str
+    dob: str
 
 
 class Aidvantage:
@@ -86,8 +95,19 @@ class Aidvantage:
         LOGIN_PAGE = PageDetail("Forgot User ID Forgot Password", "Log in")
         ADDITIONAL_INFO = PageDetail(
             "Please provide the information below so we can verify your account", None)
-        ACCOUNT_SUMMARY = PageDetail("This is an attempt to collect a debt and any information obtained will be used for that purpose", "Account Summary")
-        ACCOUNT_HISTORY = PageDetail("The information contained on this page is current as of the day the information is requested", "Account History")
+        ACCOUNT_SUMMARY = PageDetail(
+            (
+                "This is an attempt to collect a debt and any information obtained will "
+                "be used for that purpose"
+            ),
+            "Account Summary")
+        ACCOUNT_HISTORY = PageDetail(
+            (
+                "The information contained on this page is current as of the day "
+                "the information is requested"
+            ),
+            "Account History"
+        )
         LOAN_DETAILS = PageDetail("All Loan Details", "Loan Details")
         UNKNOWN = PageDetail("Not a known page type.", None)
         EXPIRED = PageDetail("Your session has expired.", None)
@@ -99,7 +119,7 @@ class Aidvantage:
 
             for page_choice in Aidvantage.CurrentPage:
                 assert isinstance(page_choice.value, PageDetail)
-                if page_choice.value.MATCHING_TEXT in page_text:
+                if page_choice.value.matching_text in page_text:
                     return page_choice
 
             return Aidvantage.CurrentPage.UNKNOWN
@@ -109,17 +129,17 @@ class Aidvantage:
             """Navigates to the specified page."""
             if Aidvantage.CurrentPage.get_current_page(driver) == page:
                 return
-            if page.value.LINK_TEXT is None:
+            if page.value.link_text is None:
                 raise ValueError(f"{page} has no link text.")
-            driver.find_element(By.PARTIAL_LINK_TEXT, page.value.LINK_TEXT).click()
+            driver.find_element(By.PARTIAL_LINK_TEXT, page.value.link_text).click()
 
     def __init__(
-        self, username: str, password: str, ssn: str, dob: str, driver: WebDriver | None = None
+        self, login: UserLogin, driver: WebDriver | None = None
     ) -> None:
-        self.__username: str = username
-        self.__password: str = password
-        self.__ssn: str = ssn
-        self.__dob: str = dob
+        self.__username: str = login.username
+        self.__password: str = login.password
+        self.__ssn: str = login.ssn
+        self.__dob: str = login.dob
         self.home_page = "https://aidvantage.studentaid.gov"
         if driver is None:
             driver = webdriver.Chrome()
@@ -154,7 +174,10 @@ class Aidvantage:
         wait = WebDriverWait(self.driver, 10)  # Wait up to 10 seconds
 
         # Get to the right page.
-        if Aidvantage.CurrentPage.get_current_page(self.driver) is not Aidvantage.CurrentPage.ACCOUNT_HISTORY:
+        if (
+            Aidvantage.CurrentPage.get_current_page(self.driver)
+            is not Aidvantage.CurrentPage.ACCOUNT_HISTORY
+        ):
             self._require_login()
             self.go_to_page(Aidvantage.CurrentPage.ACCOUNT_SUMMARY)
 
@@ -178,7 +201,10 @@ class Aidvantage:
     def get_account_details(self) -> dict[str, LoanDetails]:
         """Get the loan details of every loan."""
         self._require_login()
-        if Aidvantage.CurrentPage.get_current_page(self.driver) is not Aidvantage.CurrentPage.LOAN_DETAILS:
+        if (
+            Aidvantage.CurrentPage.get_current_page(self.driver)
+            is not Aidvantage.CurrentPage.LOAN_DETAILS
+        ):
             elem = self.driver.find_element(By.LINK_TEXT, "Loan Details")
             elem.click()
 

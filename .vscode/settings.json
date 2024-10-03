@@ -1,5 +1,10 @@
 {
     "cSpell.words": [
         "Aidvantage"
+    ],
+    "cSpell.ignoreWords": [
+        "Selcted",
+        "chromedriver",
+        "thead"
     ]
 }
