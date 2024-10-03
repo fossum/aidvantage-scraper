@@ -20,10 +20,10 @@ jobs:
         pipenv install --dev
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files '*.py')
+        pipenv run pylint $(git ls-files '*.py')
     - name: Analysing the code with pylint
       run: |
-        mypy $(git ls-files '*.py')
+        pipenv run mypy $(git ls-files '*.py')
     - name: Analysing the code with pylint
       run: |
-        flake8 $(git ls-files '*.py')
+        pipenv run flake8 $(git ls-files '*.py')
