@@ -3,6 +3,8 @@
         "github.vscode-github-actions",
         "ms-python.flake8",
         "ms-python.mypy-type-checker",
-        "ms-python.pylint"
+        "ms-python.pylint",
+        "ms-python.python",
+        "ms-python.debugpy"
     ]
 }

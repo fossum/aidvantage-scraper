@@ -40,7 +40,7 @@ from attrs import define, field
 from pandas import DataFrame
 
 import requests
-
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
@@ -89,10 +89,10 @@ class Aidvantage:
 
     class CurrentPage(Enum):
         """Various pages within the website."""
-        HOME_PAGE = PageDetail("Welcome to Aidvantage!", "")
+        HOME_PAGE = PageDetail("Aidvantage is here to help you better understand", None)
         GOV_DISCLAIMER = PageDetail(
             "You are accessing a U.S. Federal Government computer system", None)
-        LOGIN_PAGE = PageDetail("Forgot User ID Forgot Password", "Log in")
+        LOGIN_PAGE = PageDetail("Forgot User ID Forgot Password", "log in")
         ADDITIONAL_INFO = PageDetail(
             "Please provide the information below so we can verify your account", None)
         ACCOUNT_SUMMARY = PageDetail(
@@ -141,12 +141,30 @@ class Aidvantage:
         self.__ssn: str = login.ssn
         self.__dob: str = login.dob
         self.home_page = "https://aidvantage.studentaid.gov"
-        if driver is None:
-            driver = webdriver.Chrome()
+
+    def __enter__(self) -> "Aidvantage":
+        # driver = webdriver.Chrome()
+        # options = ChromeOptions()
+        # options.set_capability('se:name', 'test_visit_basic_auth_secured_page (ChromeTests)')
+        # driver = webdriver.Remote(options=options, command_executor="http://localhost:4444")
+        options = ChromeOptions()
+        options.add_argument("start-maximized")  # open Browser in maximized mode
+        options.add_argument("disable-infobars")  # disabling infobars
+        options.add_argument("--disable-extensions")  # disabling extensions
+        options.add_argument("--disable-gpu")  # applicable to windows os only
+        options.add_argument("--disable-dev-shm-usage")  # overcome limited resource problems
+        options.add_argument("--no-sandbox")  # Bypass OS security model
+        # driver = ChromeDriver(options)
+        driver = webdriver.Chrome(options)
+
         self.driver: WebDriver = driver
         # Manual call to get things going.
         self.driver.get(self.home_page)
         self.driver.implicitly_wait(5)
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        self.driver.quit()
 
     def __del__(self) -> None:
         """Cleans up the driver."""
