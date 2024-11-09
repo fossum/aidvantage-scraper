@@ -201,12 +201,7 @@ class Aidvantage:
     def get_account_details(self) -> dict[str, LoanDetails]:
         """Get the loan details of every loan."""
         self._require_login()
-        if (
-            Aidvantage.CurrentPage.get_current_page(self.driver)
-            is not Aidvantage.CurrentPage.LOAN_DETAILS
-        ):
-            elem = self.driver.find_element(By.LINK_TEXT, "Loan Details")
-            elem.click()
+        Aidvantage.CurrentPage.go_to_page(self.driver, Aidvantage.CurrentPage.LOAN_DETAILS)
 
         # Get account table.
         table = self.driver.find_element(By.ID, "tblAllLoanDetails")
