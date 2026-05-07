@@ -16,4 +16,5 @@ if __name__ == "__main__":
     )
     loans = av.get_account_details()
     for loan_name, details in loans.items():
-        pprint(av.get_transactions(loan_name))
+        transactions = av.get_transactions(loan_name)
+        pprint(transactions[:10])
